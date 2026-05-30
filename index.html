@@ -1,14 +1,996 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Internship</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Amazon.in: Online Shopping India</title>
+<link rel="icon" href="https://www.amazon.in/favicon.ico" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 14px; background: #EAEDED; color: #0F1111; }
+  a { text-decoration: none; color: inherit; cursor: pointer; }
+
+  /* ── TOP NAV ── */
+  #navbar {
+    background: #131921;
+    display: flex;
+    align-items: stretch;
+    padding: 0 8px;
+    gap: 4px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    min-height: 60px;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    padding: 8px 6px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  .nav-logo:hover { border-color: #fff; }
+  .nav-logo img { height: 35px; margin-top: 6px; filter: brightness(0) invert(1); }
+  .nav-logo .in-flag { font-size: 11px; color: #FF9900; margin-top: 2px; margin-left: 2px; font-weight: 700; }
+
+  .nav-deliver {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 6px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    min-width: 120px;
+  }
+  .nav-deliver:hover { border-color: #fff; }
+  .nav-deliver .deliver-top { color: #CCC; font-size: 11px; }
+  .nav-deliver .deliver-bot { color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 3px; }
+
+  .nav-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+  .nav-search select {
+    background: #f3f3f3;
+    border: none;
+    height: 100%;
+    padding: 0 8px;
+    font-size: 12px;
+    color: #0F1111;
+    cursor: pointer;
+    border-right: 1px solid #CDCDCD;
+    border-radius: 4px 0 0 4px;
+    min-width: 56px;
+    max-width: 170px;
+  }
+  .nav-search input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    padding: 0 12px;
+    font-size: 16px;
+    outline: none;
+    color: #0F1111;
+  }
+  .nav-search button {
+    background: #FF9900;
+    border: none;
+    height: 100%;
+    padding: 0 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border-radius: 0 4px 4px 0;
+    transition: background 0.1s;
+  }
+  .nav-search button:hover { background: #FA8900; }
+  .nav-search button svg { width: 20px; height: 20px; fill: #0F1111; }
+
+  .nav-flag {
+    display: flex;
+    align-items: center;
+    padding: 8px 6px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    gap: 2px;
+  }
+  .nav-flag:hover { border-color: #fff; }
+  .nav-flag img { height: 16px; }
+  .nav-flag span { color: #fff; font-weight: 700; font-size: 13px; }
+
+  .nav-account {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 8px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .nav-account:hover { border-color: #fff; }
+  .nav-account .top { color: #CCC; font-size: 11px; }
+  .nav-account .bot { color: #fff; font-size: 13px; font-weight: 700; }
+
+  .nav-returns {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8px 8px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .nav-returns:hover { border-color: #fff; }
+  .nav-returns .top { color: #CCC; font-size: 11px; }
+  .nav-returns .bot { color: #fff; font-size: 13px; font-weight: 700; }
+
+  .nav-cart {
+    display: flex;
+    align-items: center;
+    padding: 8px 8px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    cursor: pointer;
+    gap: 4px;
+    position: relative;
+  }
+  .nav-cart:hover { border-color: #fff; }
+  .cart-icon-wrap { position: relative; }
+  .cart-icon-wrap svg { width: 40px; height: 40px; fill: #fff; }
+  .cart-count {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #F08804;
+    color: #0F1111;
+    font-size: 16px;
+    font-weight: 700;
+    min-width: 22px;
+    text-align: center;
+    border-radius: 2px;
+    line-height: 1.3;
+  }
+  .cart-text { color: #fff; font-size: 13px; font-weight: 700; margin-top: 14px; }
+
+  /* ── SUBNAV ── */
+  #subnav {
+    background: #232F3E;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    overflow-x: auto;
+    height: 38px;
+    gap: 2px;
+  }
+  #subnav::-webkit-scrollbar { display: none; }
+  .subnav-item {
+    color: #fff;
+    font-size: 13px;
+    padding: 6px 10px;
+    border: 2px solid transparent;
+    border-radius: 2px;
+    white-space: nowrap;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+  }
+  .subnav-item:hover { border-color: #fff; }
+  .subnav-item.all { font-weight: 700; }
+  .subnav-item.prime-link { color: #00B0FF; }
+
+  /* ── HERO / CAROUSEL ── */
+  #hero {
+    position: relative;
+    overflow: hidden;
+    background: #232F3E;
+    height: 500px;
+  }
+  .hero-slide {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0; left: 0;
+  }
+  .hero-slide.active { display: block; }
+  .hero-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-slide-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+    padding: 20px;
+  }
+  .slide-bg-1 { background: linear-gradient(135deg, #0a2342 0%, #1a4a8a 50%, #2d6bc4 100%); }
+  .slide-bg-2 { background: linear-gradient(135deg, #1a0a0a 0%, #8B0000 50%, #c0392b 100%); }
+  .slide-bg-3 { background: linear-gradient(135deg, #0a2a0a 0%, #1a6a1a 50%, #27ae60 100%); }
+  .slide-bg-4 { background: linear-gradient(135deg, #1a1a00 0%, #8B8B00 50%, #d4ac0d 100%); }
+  .slide-emoji { font-size: 80px; }
+  .slide-title { font-size: 36px; font-weight: 700; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
+  .slide-sub { font-size: 18px; color: #ddd; }
+  .slide-badge { background: #FF9900; color: #0F1111; font-size: 16px; font-weight: 700; padding: 6px 20px; border-radius: 3px; display: inline-block; }
+  .slide-cta {
+    background: #FF9900;
+    color: #0F1111;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 10px 28px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .slide-cta:hover { background: #FA8900; }
+  .hero-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.85);
+    border: none;
+    width: 40px;
+    height: 70px;
+    font-size: 22px;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0F1111;
+  }
+  .hero-arrow:hover { background: #fff; }
+  .hero-prev { left: 0; border-radius: 0 4px 4px 0; }
+  .hero-next { right: 0; border-radius: 4px 0 0 4px; }
+  .hero-dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+  }
+  .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: background 0.2s; }
+  .hero-dot.active { background: #fff; }
+  .hero-shadow-left {
+    position: absolute; top: 0; left: 0; height: 100%;
+    width: 80px;
+    background: linear-gradient(to right, rgba(0,0,0,0.25), transparent);
+    pointer-events: none;
+  }
+  .hero-shadow-right {
+    position: absolute; top: 0; right: 0; height: 100%;
+    width: 80px;
+    background: linear-gradient(to left, rgba(0,0,0,0.25), transparent);
+    pointer-events: none;
+  }
+
+  /* ── MAIN CONTENT ── */
+  #main { max-width: 1500px; margin: 0 auto; padding: 16px 14px; }
+
+  /* ── DEAL BANNER ── */
+  .deal-bar {
+    background: #fff;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .deal-bar h2 { font-size: 22px; color: #C7511F; font-weight: 700; white-space: nowrap; }
+  .deal-timer { display: flex; gap: 4px; }
+  .timer-block {
+    background: #0F1111;
+    color: #fff;
+    border-radius: 3px;
+    padding: 4px 7px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    min-width: 40px;
+    text-align: center;
+  }
+  .timer-block small { display: block; font-size: 9px; color: #AAA; font-weight: 400; letter-spacing: 1px; margin-top: 2px; }
+  .timer-sep { font-size: 20px; font-weight: 700; color: #0F1111; line-height: 1.5; }
+  .deal-bar a { color: #007185; font-size: 13px; margin-left: auto; white-space: nowrap; }
+  .deal-bar a:hover { color: #C7511F; text-decoration: underline; }
+
+  /* ── PRODUCT SECTIONS ── */
+  .section {
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .section-title { font-size: 22px; font-weight: 700; color: #0F1111; }
+  .section-see-more { color: #007185; font-size: 13px; cursor: pointer; }
+  .section-see-more:hover { color: #C7511F; text-decoration: underline; }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0;
+  }
+  .product-card {
+    padding: 14px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .product-card:hover { border-color: #DDD; box-shadow: 0 2px 12px rgba(0,0,0,0.08); z-index: 1; position: relative; }
+  .product-card img, .product-card .prod-emoji {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    background: #F7FAFA;
+  }
+  .prod-name { font-size: 14px; color: #0F1111; margin: 8px 0 4px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .prod-brand { font-size: 12px; color: #565959; margin-bottom: 4px; }
+  .stars { color: #FF9900; font-size: 14px; display: flex; align-items: center; gap: 4px; }
+  .stars .count { color: #007185; font-size: 13px; }
+  .price-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .price-symbol { font-size: 13px; vertical-align: top; line-height: 1.8; }
+  .price-main { font-size: 22px; font-weight: 400; }
+  .price-old { color: #565959; font-size: 13px; }
+  .price-old del { color: #565959; }
+  .price-discount { color: #B12704; font-size: 14px; font-weight: 500; }
+  .badge-limited { background: #CC0C39; color: #fff; font-size: 11px; padding: 2px 6px; border-radius: 2px; font-weight: 700; margin-top: 4px; display: inline-block; }
+  .badge-bestseller { background: #FF9900; color: #0F1111; font-size: 11px; padding: 2px 6px; border-radius: 2px; font-weight: 700; margin-top: 4px; display: inline-block; }
+  .badge-new { background: #D4E9FF; color: #002B5C; font-size: 11px; padding: 2px 6px; border-radius: 2px; font-weight: 700; margin-top: 4px; display: inline-block; }
+  .prime-row { display: flex; align-items: center; gap: 4px; margin-top: 4px; font-size: 12px; color: #565959; }
+  .prime-logo { background: #00A8E0; color: #fff; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 2px; letter-spacing: 0.5px; }
+  .add-to-cart-btn {
+    width: 100%;
+    margin-top: 10px;
+    background: #FFD814;
+    border: 1px solid #FCD200;
+    border-radius: 20px;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    color: #0F1111;
+    transition: background 0.1s;
+  }
+  .add-to-cart-btn:hover { background: #F7CA00; }
+  .add-to-cart-btn.added { background: #5cb85c; border-color: #4cae4c; color: #fff; }
+
+  /* ── CATEGORIES ── */
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .cat-card {
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    padding: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: box-shadow 0.15s;
+  }
+  .cat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .cat-emoji { font-size: 48px; margin-bottom: 8px; }
+  .cat-name { font-size: 15px; font-weight: 700; color: #0F1111; margin-bottom: 4px; }
+  .cat-link { font-size: 13px; color: #007185; }
+  .cat-link:hover { text-decoration: underline; color: #C7511F; }
+
+  /* ── BANNER STRIPS ── */
+  .banner-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .banner-card {
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    padding: 20px 16px;
+    cursor: pointer;
+    transition: box-shadow 0.15s;
+  }
+  .banner-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .banner-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #0F1111; }
+  .banner-card img, .banner-card .bc-emoji { font-size: 60px; width: 100%; height: 180px; object-fit: cover; display: flex; align-items: center; justify-content: center; border-radius: 3px; background: #F7FAFA; }
+  .banner-card .shop-link { color: #007185; font-size: 13px; margin-top: 12px; display: block; }
+  .banner-card .shop-link:hover { text-decoration: underline; color: #C7511F; }
+
+  /* ── RECENTLY VIEWED ── */
+  .recently-viewed {
+    background: #fff;
+    border-radius: 4px;
+    border: 1px solid #DDD;
+    padding: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .rv-scroll { display: flex; gap: 0; overflow-x: auto; }
+  .rv-scroll::-webkit-scrollbar { height: 4px; }
+  .rv-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+  .rv-item { min-width: 150px; padding: 10px; text-align: center; cursor: pointer; border-radius: 3px; }
+  .rv-item:hover { background: #F7FAFA; }
+  .rv-item .rv-emoji { font-size: 50px; }
+  .rv-item .rv-name { font-size: 12px; color: #0F1111; margin-top: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .rv-item .rv-price { font-size: 13px; font-weight: 700; color: #0F1111; margin-top: 4px; }
+
+  /* ── FOOTER ── */
+  footer { margin-top: 24px; }
+  .footer-back-top {
+    background: #37475A;
+    color: #fff;
+    text-align: center;
+    padding: 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .footer-back-top:hover { background: #485769; }
+  .footer-links {
+    background: #232F3E;
+    color: #DDD;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 40px 80px;
+  }
+  .footer-col h4 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+  .footer-col a { display: block; color: #DDD; font-size: 13px; margin-bottom: 6px; cursor: pointer; }
+  .footer-col a:hover { color: #FF9900; }
+  .footer-bottom {
+    background: #131921;
+    color: #CCC;
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+  }
+  .footer-logo { font-size: 22px; font-weight: 700; color: #FF9900; margin-bottom: 12px; letter-spacing: -1px; display: inline-block; }
+  .footer-bottom-links { display: flex; justify-content: center; gap: 16px; margin-top: 8px; flex-wrap: wrap; }
+  .footer-bottom-links a { color: #CCC; font-size: 12px; border-right: 1px solid #555; padding-right: 16px; }
+  .footer-bottom-links a:last-child { border-right: none; }
+  .footer-bottom-links a:hover { text-decoration: underline; }
+
+  /* ── NOTIFICATION TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #0F1111;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s, transform 0.3s;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .banner-strip { grid-template-columns: repeat(2, 1fr); }
+    .footer-links { grid-template-columns: repeat(2, 1fr); padding: 24px 20px; }
+    #hero { height: 280px; }
+    .slide-title { font-size: 22px; }
+    .slide-emoji { font-size: 48px; }
+  }
+  @media (max-width: 600px) {
+    .nav-deliver, .nav-flag, .nav-returns { display: none; }
+    .banner-strip { grid-template-columns: repeat(1, 1fr); }
+    .footer-links { grid-template-columns: 1fr; }
+  }
+</style>
 </head>
 <body>
-    <h1>HELLO GUYSSSSSS!</h1>
-    <p>Welcome to my webpage</p>
-    <h2>About Me</h2>
-    <p>I am a passionate web developer.</p>
+
+<!-- ══════════════ NAVBAR ══════════════ -->
+<nav id="navbar">
+  <!-- Logo -->
+  <div class="nav-logo" title="Amazon.in">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;">
+      <span style="font-size:28px;font-weight:700;color:#FF9900;letter-spacing:-1px;line-height:1;">amazon</span>
+      <span style="font-size:11px;color:#FF9900;font-weight:700;margin-top:-2px;letter-spacing:1px;">.in</span>
+    </div>
+  </div>
+
+  <!-- Deliver To -->
+  <div class="nav-deliver">
+    <div class="deliver-top">
+      <svg style="width:12px;height:12px;fill:#CCC;vertical-align:-1px;" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      Deliver to Manoj
+    </div>
+    <div class="deliver-bot">
+      <svg style="width:14px;height:14px;fill:#fff;" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+      Chennai 600058
+    </div>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="nav-search">
+    <select title="Search category">
+      <option>All</option>
+      <option>Alexa Skills</option>
+      <option>Amazon Devices</option>
+      <option>Apps &amp; Games</option>
+      <option>Baby</option>
+      <option>Books</option>
+      <option>Car &amp; Motorbike</option>
+      <option>Clothing</option>
+      <option>Electronics</option>
+      <option>Grocery</option>
+      <option>Health</option>
+      <option>Home &amp; Kitchen</option>
+      <option>Jewellery</option>
+      <option>Kindle Store</option>
+      <option>Luggage</option>
+      <option>Mobiles</option>
+      <option>Movies &amp; TV</option>
+      <option>Music</option>
+      <option>Office Products</option>
+      <option>Pet Supplies</option>
+      <option>Prime Video</option>
+      <option>Software</option>
+      <option>Sports &amp; Outdoors</option>
+      <option>Tools &amp; Home Improvement</option>
+      <option>Toys &amp; Games</option>
+      <option>Video Games</option>
+    </select>
+    <input type="text" placeholder="Search Amazon.in" id="searchInput" autocomplete="off" />
+    <button aria-label="Search" onclick="doSearch()">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+    </button>
+  </div>
+
+  <!-- Language -->
+  <div class="nav-flag">
+    <span style="font-size:20px;">🇮🇳</span>
+    <span>EN</span>
+    <svg style="width:10px;height:10px;fill:#fff;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+  </div>
+
+  <!-- Account -->
+  <div class="nav-account">
+    <div class="top">Hello, Manoj</div>
+    <div class="bot">Account &amp; Lists ▾</div>
+  </div>
+
+  <!-- Returns -->
+  <div class="nav-returns">
+    <div class="top">Returns</div>
+    <div class="bot">&amp; Orders</div>
+  </div>
+
+  <!-- Cart -->
+  <div class="nav-cart" onclick="toggleCart()">
+    <div class="cart-icon-wrap">
+      <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zM7.17 14.75l.03-.12.9-1.63H16.55c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0 0 21 4H5.21l-.94-2H1v2h2l3.6 7.59L5.25 14c-.16.28-.25.61-.25.96C5 16.1 5.9 17 7 17h12v-2H7.42a.13.13 0 0 1-.25-.25z"/></svg>
+      <div class="cart-count" id="cartCount">0</div>
+    </div>
+    <div class="cart-text">Cart</div>
+  </div>
+</nav>
+
+<!-- ══════════════ SUBNAV ══════════════ -->
+<div id="subnav">
+  <div class="subnav-item all">
+    <svg style="width:18px;height:18px;fill:#fff;" viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+    All
+  </div>
+  <div class="subnav-item">Today's Deals</div>
+  <div class="subnav-item">Amazon miniTV</div>
+  <div class="subnav-item">Sell</div>
+  <div class="subnav-item">Best Sellers</div>
+  <div class="subnav-item">Mobiles</div>
+  <div class="subnav-item">Customer Service</div>
+  <div class="subnav-item">Electronics</div>
+  <div class="subnav-item">Fashion</div>
+  <div class="subnav-item">Home &amp; Kitchen</div>
+  <div class="subnav-item">Books</div>
+  <div class="subnav-item">New Releases</div>
+  <div class="subnav-item">Grocery</div>
+  <div class="subnav-item">Computers</div>
+  <div class="subnav-item">Sports</div>
+  <div class="subnav-item">Health</div>
+  <div class="subnav-item">Beauty</div>
+  <div class="subnav-item prime-link">Prime</div>
+</div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<div id="hero">
+  <div class="hero-slide active slide-bg-1">
+    <div class="hero-slide-inner">
+      <div class="slide-emoji">📱</div>
+      <div class="slide-title">Mobiles at Lowest Prices</div>
+      <div class="slide-sub">Up to 50% off on top brands</div>
+      <div class="slide-badge">Starts at ₹5,999</div>
+      <button class="slide-cta" onclick="showToast('Redirecting to Mobiles...')">Shop Now</button>
+    </div>
+  </div>
+  <div class="hero-slide slide-bg-2">
+    <div class="hero-slide-inner">
+      <div class="slide-emoji">🎧</div>
+      <div class="slide-title">Great Indian Festival</div>
+      <div class="slide-sub">Electronics mega sale — today only</div>
+      <div class="slide-badge">Extra 10% Bank Offer</div>
+      <button class="slide-cta" onclick="showToast('Redirecting to Festival Sale...')">Grab Deals</button>
+    </div>
+  </div>
+  <div class="hero-slide slide-bg-3">
+    <div class="hero-slide-inner">
+      <div class="slide-emoji">👗</div>
+      <div class="slide-title">Fashion Week Sale</div>
+      <div class="slide-sub">Top brands, fresh styles — up to 70% off</div>
+      <div class="slide-badge">Free Delivery on Prime</div>
+      <button class="slide-cta" onclick="showToast('Redirecting to Fashion...')">Explore Styles</button>
+    </div>
+  </div>
+  <div class="hero-slide slide-bg-4">
+    <div class="hero-slide-inner">
+      <div class="slide-emoji">🏠</div>
+      <div class="slide-title">Home Makeover Sale</div>
+      <div class="slide-sub">Furniture, decor &amp; appliances</div>
+      <div class="slide-badge">No Cost EMI Available</div>
+      <button class="slide-cta" onclick="showToast('Redirecting to Home & Kitchen...')">Shop Home</button>
+    </div>
+  </div>
+  <button class="hero-arrow hero-prev" onclick="moveSlide(-1)">&#10094;</button>
+  <button class="hero-arrow hero-next" onclick="moveSlide(1)">&#10095;</button>
+  <div class="hero-dots" id="heroDots"></div>
+  <div class="hero-shadow-left"></div>
+  <div class="hero-shadow-right"></div>
+</div>
+
+<!-- ══════════════ MAIN CONTENT ══════════════ -->
+<div id="main">
+
+  <!-- Deal of the Day Banner -->
+  <div class="deal-bar">
+    <h2>⚡ Deal of the Day</h2>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#565959;font-size:13px;">Ends in</span>
+      <div class="deal-timer">
+        <div class="timer-block" id="th">--<small>HRS</small></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block" id="tm">--<small>MIN</small></div>
+        <div class="timer-sep">:</div>
+        <div class="timer-block" id="ts">--<small>SEC</small></div>
+      </div>
+    </div>
+    <a href="#">See all deals ›</a>
+  </div>
+
+  <!-- 4-Column Banner Strip -->
+  <div class="banner-strip">
+    <div class="banner-card">
+      <h3>Bestsellers in Electronics</h3>
+      <div class="bc-emoji">🔌</div>
+      <a class="shop-link" href="#">Shop now ›</a>
+    </div>
+    <div class="banner-card">
+      <h3>New releases in Books</h3>
+      <div class="bc-emoji">📚</div>
+      <a class="shop-link" href="#">Shop now ›</a>
+    </div>
+    <div class="banner-card">
+      <h3>Kitchen essentials</h3>
+      <div class="bc-emoji">🍳</div>
+      <a class="shop-link" href="#">Shop now ›</a>
+    </div>
+    <div class="banner-card">
+      <h3>Fashion picks for you</h3>
+      <div class="bc-emoji">👟</div>
+      <a class="shop-link" href="#">Shop now ›</a>
+    </div>
+  </div>
+
+  <!-- Featured Products -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Featured Products</div>
+      <a class="section-see-more">See more ›</a>
+    </div>
+    <div class="product-grid" id="featuredGrid"></div>
+  </div>
+
+  <!-- Browse Categories -->
+  <div style="font-size:22px;font-weight:700;margin-bottom:14px;color:#0F1111;">Shop by Category</div>
+  <div class="cat-grid" id="catGrid"></div>
+
+  <!-- Best Sellers -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">🏆 Best Sellers</div>
+      <a class="section-see-more">See all best sellers ›</a>
+    </div>
+    <div class="product-grid" id="bestsellerGrid"></div>
+  </div>
+
+  <!-- Recently Viewed -->
+  <div class="recently-viewed">
+    <div class="section-header">
+      <div class="section-title">Recently Viewed</div>
+      <a class="section-see-more">See more ›</a>
+    </div>
+    <div class="rv-scroll" id="recentGrid"></div>
+  </div>
+
+  <!-- More to Explore -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">Inspired by your browsing history</div>
+      <a class="section-see-more">See more ›</a>
+    </div>
+    <div class="product-grid" id="inspiredGrid"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</div>
+  <div class="footer-links">
+    <div class="footer-col">
+      <h4>Get to Know Us</h4>
+      <a>About Amazon</a>
+      <a>Careers</a>
+      <a>Press Releases</a>
+      <a>Amazon Science</a>
+      <a>Investor Relations</a>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <a>Sell on Amazon</a>
+      <a>Sell under Amazon Accelerator</a>
+      <a>Protect and Build Your Brand</a>
+      <a>Amazon Global Selling</a>
+      <a>Become an Affiliate</a>
+      <a>Advertise Your Products</a>
+      <a>Supply to Amazon</a>
+    </div>
+    <div class="footer-col">
+      <h4>Amazon Payment Products</h4>
+      <a>Amazon Business Card</a>
+      <a>Shop with Points</a>
+      <a>Reload Your Balance</a>
+      <a>Amazon Currency Converter</a>
+      <a>Gift Cards</a>
+      <a>Amazon Pay</a>
+    </div>
+    <div class="footer-col">
+      <h4>Let Us Help You</h4>
+      <a>COVID-19 and Amazon</a>
+      <a>Your Account</a>
+      <a>Returns Centre</a>
+      <a>100% Purchase Protection</a>
+      <a>Amazon App Download</a>
+      <a>Amazon Assistant Download</a>
+      <a>Help</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-logo">amazon</div>
+    <div class="footer-bottom-links">
+      <a>Conditions of Use &amp; Sale</a>
+      <a>Privacy Notice</a>
+      <a>Interest-Based Ads</a>
+    </div>
+    <p style="margin-top:10px;">© 1996-2026, Amazon.com, Inc. or its affiliates</p>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────
+const products = [
+  { emoji:"📱", name:"Samsung Galaxy S25 Ultra 5G 256GB Phantom Black", brand:"Samsung", stars:4.5, reviews:12483, price:109999, mrp:131999, prime:true, badge:"bestseller" },
+  { emoji:"🎧", name:"Sony WH-1000XM5 Wireless Noise Cancelling Headphones", brand:"Sony", stars:4.7, reviews:8932, price:22990, mrp:34990, prime:true, badge:"bestseller" },
+  { emoji:"💻", name:"Apple MacBook Air M3 13-inch 16GB RAM 512GB SSD", brand:"Apple", stars:4.8, reviews:5671, price:119900, mrp:134900, prime:false, badge:"new" },
+  { emoji:"⌚", name:"Apple Watch Series 10 GPS 46mm Starlight Aluminium", brand:"Apple", stars:4.6, reviews:3219, price:44900, mrp:49900, prime:true, badge:"" },
+  { emoji:"📷", name:"Canon EOS R50 Mirrorless Camera with 18-45mm Kit Lens", brand:"Canon", stars:4.4, reviews:1872, price:69999, mrp:84995, prime:true, badge:"limited" },
+  { emoji:"🔋", name:"Anker PowerCore 24000mAh 140W PD Power Bank", brand:"Anker", stars:4.3, reviews:6741, price:5999, mrp:8999, prime:false, badge:"limited" },
+  { emoji:"🖱️", name:"Logitech MX Master 3S Wireless Performance Mouse", brand:"Logitech", stars:4.8, reviews:9823, price:8495, mrp:10995, prime:true, badge:"bestseller" },
+  { emoji:"💡", name:"Philips 9W Smart Wi-Fi LED Bulb Compatible with Alexa", brand:"Philips", stars:4.2, reviews:4512, price:799, mrp:1199, prime:false, badge:"" },
+];
+
+const bestsellers = [
+  { emoji:"🎮", name:"PlayStation 5 Slim Disc Edition Console", brand:"Sony", stars:4.9, reviews:18234, price:44990, mrp:54990, prime:true, badge:"bestseller" },
+  { emoji:"📺", name:"LG 55 inch OLED evo C4 4K Smart TV 2024 Model", brand:"LG", stars:4.7, reviews:2341, price:139999, mrp:189999, prime:true, badge:"bestseller" },
+  { emoji:"🖥️", name:"Dell 27 inch QHD IPS Gaming Monitor 165Hz 1ms", brand:"Dell", stars:4.5, reviews:3102, price:24999, mrp:32999, prime:false, badge:"" },
+  { emoji:"🧴", name:"Minimalist 10% Niacinamide + Zinc Face Serum 30ml", brand:"Minimalist", stars:4.3, reviews:22193, price:399, mrp:599, prime:true, badge:"bestseller" },
+  { emoji:"☕", name:"Philips HD7447 Coffee Maker with Permanent Filter", brand:"Philips", stars:4.1, reviews:8763, price:3495, mrp:5495, prime:true, badge:"" },
+  { emoji:"🎒", name:"Wildcraft Trailblazer 55L Hiking Rucksack Blue", brand:"Wildcraft", stars:4.4, reviews:5621, price:2599, mrp:3999, prime:false, badge:"limited" },
+  { emoji:"🕹️", name:"Xbox Game Pass Ultimate 3 Month Membership", brand:"Microsoft", stars:4.8, reviews:31203, price:1099, mrp:1599, prime:true, badge:"bestseller" },
+  { emoji:"🔌", name:"Belkin BoostCharge 65W GaN USB-C PD Charger", brand:"Belkin", stars:4.5, reviews:4532, price:2999, mrp:4499, prime:true, badge:"" },
+];
+
+const inspired = [
+  { emoji:"🎵", name:"boAt Airdopes 141 True Wireless Earbuds 42H Playtime", brand:"boAt", stars:4.1, reviews:91203, price:999, mrp:2990, prime:true, badge:"bestseller" },
+  { emoji:"⌨️", name:"Keychron K2 Pro Wireless Mechanical Keyboard QMK/VIA", brand:"Keychron", stars:4.6, reviews:2341, price:9499, mrp:11999, prime:false, badge:"new" },
+  { emoji:"📦", name:"Amazon Echo Dot 5th Gen Smart Speaker with Alexa", brand:"Amazon", stars:4.5, reviews:44532, price:4499, mrp:5999, prime:true, badge:"" },
+  { emoji:"🌡️", name:"Mi Smart Air Purifier 4 Compact HEPA Filter", brand:"Xiaomi", stars:4.3, reviews:6821, price:7999, mrp:10999, prime:true, badge:"limited" },
+  { emoji:"🖨️", name:"HP DeskJet 2331 All-in-One Colour Printer", brand:"HP", stars:4.0, reviews:15234, price:3999, mrp:5499, prime:true, badge:"" },
+  { emoji:"🎙️", name:"Blue Yeti USB Microphone Blackout Edition", brand:"Blue", stars:4.7, reviews:8123, price:8999, mrp:13999, prime:false, badge:"new" },
+  { emoji:"💾", name:"Samsung T7 Shield 1TB Portable SSD USB 3.2 Gen 2", brand:"Samsung", stars:4.6, reviews:7632, price:7999, mrp:12999, prime:true, badge:"bestseller" },
+  { emoji:"🔦", name:"Olight M2R Pro Warrior Rechargeable Tactical Flashlight", brand:"Olight", stars:4.8, reviews:1823, price:6499, mrp:8999, prime:false, badge:"" },
+];
+
+const categories = [
+  { emoji:"📱", name:"Mobiles" }, { emoji:"💻", name:"Laptops" }, { emoji:"📺", name:"TVs" },
+  { emoji:"🎧", name:"Audio" }, { emoji:"👕", name:"Fashion" }, { emoji:"🏠", name:"Home & Kitchen" },
+  { emoji:"📚", name:"Books" }, { emoji:"🎮", name:"Gaming" }, { emoji:"🧴", name:"Beauty" },
+  { emoji:"⚽", name:"Sports" }, { emoji:"🍎", name:"Grocery" }, { emoji:"🚗", name:"Car & Motorbike" },
+];
+
+const recentItems = [
+  { emoji:"📱", name:"OnePlus 13 5G 16GB RAM 512GB", price:"₹64,999" },
+  { emoji:"💡", name:"Wipro Smart Bulb 9W RGB", price:"₹549" },
+  { emoji:"🎒", name:"Skybags Footloose Neo Backpack", price:"₹1,499" },
+  { emoji:"⌚", name:"Fastrack Reflex Smartwatch", price:"₹2,995" },
+  { emoji:"🖱️", name:"Razer DeathAdder Essential Mouse", price:"₹2,199" },
+  { emoji:"🔋", name:"Mi 20000mAh Power Bank 3i", price:"₹1,499" },
+  { emoji:"📷", name:"GoPro HERO12 Black Action Camera", price:"₹34,990" },
+  { emoji:"🎙️", name:"HyperX SoloCast USB Microphone", price:"₹4,999" },
+];
+
+// ─── HELPERS ────────────────────────────────────────────────
+function starsHTML(r) {
+  let s = "";
+  for (let i = 1; i <= 5; i++) {
+    if (r >= i) s += "★";
+    else if (r >= i - 0.5) s += "½";
+    else s += "☆";
+  }
+  return s;
+}
+function discount(price, mrp) { return Math.round((1 - price/mrp)*100); }
+function fmtPrice(n) { return "₹" + n.toLocaleString("en-IN"); }
+
+let cartCount = 0;
+function addCart(btn) {
+  cartCount++;
+  document.getElementById("cartCount").textContent = cartCount;
+  btn.textContent = "Added to Cart ✓";
+  btn.classList.add("added");
+  showToast("Item added to Cart!");
+  setTimeout(() => { btn.textContent = "Add to Cart"; btn.classList.remove("added"); }, 1800);
+}
+
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+}
+
+function makeProductCard(p) {
+  const disc = discount(p.price, p.mrp);
+  const badgeHTML = p.badge === "bestseller" ? '<span class="badge-bestseller">#1 Best Seller</span>' :
+                    p.badge === "limited"     ? '<span class="badge-limited">Limited time deal</span>' :
+                    p.badge === "new"         ? '<span class="badge-new">New Release</span>' : "";
+  return `<div class="product-card">
+    <div class="prod-emoji" style="display:flex;align-items:center;justify-content:center;height:180px;background:#F7FAFA;font-size:80px;">${p.emoji}</div>
+    <div class="prod-brand">${p.brand}</div>
+    <div class="prod-name">${p.name}</div>
+    <div class="stars"><span style="color:#FF9900;">${starsHTML(p.stars)}</span><span class="count">${p.reviews.toLocaleString()}</span></div>
+    <div class="price-row">
+      <span><span class="price-symbol">₹</span><span class="price-main">${(p.price).toLocaleString("en-IN")}</span></span>
+      <span class="price-old"><del>₹${p.mrp.toLocaleString("en-IN")}</del></span>
+      <span class="price-discount">(${disc}% off)</span>
+    </div>
+    ${badgeHTML}
+    ${p.prime ? '<div class="prime-row"><span class="prime-logo">prime</span><span>FREE Delivery by tomorrow</span></div>' : ''}
+    <button class="add-to-cart-btn" onclick="addCart(this)">Add to Cart</button>
+  </div>`;
+}
+
+function makeCatCard(c) {
+  return `<div class="cat-card">
+    <div class="cat-emoji">${c.emoji}</div>
+    <div class="cat-name">${c.name}</div>
+    <div class="cat-link">Shop now ›</div>
+  </div>`;
+}
+
+function makeRecentItem(r) {
+  return `<div class="rv-item">
+    <div class="rv-emoji">${r.emoji}</div>
+    <div class="rv-name">${r.name}</div>
+    <div class="rv-price">${r.price}</div>
+  </div>`;
+}
+
+// ─── RENDER ─────────────────────────────────────────────────
+document.getElementById("featuredGrid").innerHTML = products.map(makeProductCard).join("");
+document.getElementById("bestsellerGrid").innerHTML = bestsellers.map(makeProductCard).join("");
+document.getElementById("inspiredGrid").innerHTML = inspired.map(makeProductCard).join("");
+document.getElementById("catGrid").innerHTML = categories.map(makeCatCard).join("");
+document.getElementById("recentGrid").innerHTML = recentItems.map(makeRecentItem).join("");
+
+// ─── HERO CAROUSEL ─────────────────────────────────────────
+let slideIdx = 0;
+const slides = document.querySelectorAll(".hero-slide");
+const dotsWrap = document.getElementById("heroDots");
+slides.forEach((_, i) => {
+  const d = document.createElement("div");
+  d.className = "hero-dot" + (i === 0 ? " active" : "");
+  d.onclick = () => goSlide(i);
+  dotsWrap.appendChild(d);
+});
+function goSlide(n) {
+  slides[slideIdx].classList.remove("active");
+  dotsWrap.children[slideIdx].classList.remove("active");
+  slideIdx = (n + slides.length) % slides.length;
+  slides[slideIdx].classList.add("active");
+  dotsWrap.children[slideIdx].classList.add("active");
+}
+function moveSlide(dir) { goSlide(slideIdx + dir); }
+let autoSlide = setInterval(() => moveSlide(1), 5000);
+document.getElementById("hero").addEventListener("mouseenter", () => clearInterval(autoSlide));
+document.getElementById("hero").addEventListener("mouseleave", () => { autoSlide = setInterval(() => moveSlide(1), 5000); });
+
+// ─── TIMER ──────────────────────────────────────────────────
+let secs = 4 * 3600 + 23 * 60 + 47;
+function tick() {
+  if (secs <= 0) return;
+  secs--;
+  const h = Math.floor(secs / 3600);
+  const m = Math.floor((secs % 3600) / 60);
+  const s = secs % 60;
+  document.getElementById("th").childNodes[0].textContent = String(h).padStart(2,"0");
+  document.getElementById("tm").childNodes[0].textContent = String(m).padStart(2,"0");
+  document.getElementById("ts").childNodes[0].textContent = String(s).padStart(2,"0");
+}
+tick(); setInterval(tick, 1000);
+
+// ─── SEARCH ──────────────────────────────────────────────────
+function doSearch() {
+  const q = document.getElementById("searchInput").value.trim();
+  if (q) showToast(`Searching for "${q}"...`);
+  else showToast("Please enter a search term.");
+}
+document.getElementById("searchInput").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+
+function toggleCart() {
+  showToast(`You have ${cartCount} item(s) in your cart.`);
+}
+</script>
 </body>
 </html>
